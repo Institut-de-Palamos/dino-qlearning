@@ -13,7 +13,7 @@ Quan comença una partida, `epsilon` és alt. Després de cada partida baixa una
 
 ## Actualitzar la taula
 
-Després de cada pas, l'entorn retorna recompensa `r`, estat següent `s'` i si la partida ha acabat. L'actualització és:
+Després de cada pas, l'entorn retorna l'estat següent `s'` i si la partida ha acabat. `train.py` assigna la recompensa `r` segons aquest resultat. L'actualització de Q és:
 
 $$
 Q(s,a) \leftarrow Q(s,a) + \alpha\left[r + \gamma\max_{a'}Q(s',a') - Q(s,a)\right]

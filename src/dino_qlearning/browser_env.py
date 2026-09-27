@@ -63,7 +63,7 @@ class BrowserDinoEnv:
         )
         return self._observe()
 
-    def step(self, action: int) -> tuple[State, float, bool, int]:
+    def step(self, action: int) -> tuple[State, bool, int]:
         page = self._require_page()
         if action == JUMP:
             page.keyboard.press("Space")
@@ -81,8 +81,7 @@ class BrowserDinoEnv:
 
         state = self._make_state(observation)
         crashed = bool(observation["crashed"])
-        reward = -100.0 if crashed else 1.0
-        return state, reward, crashed, int(observation["score"])
+        return state, crashed, int(observation["score"])
 
     def _observe(self) -> State:
         return self._make_state(self._read_game_state())

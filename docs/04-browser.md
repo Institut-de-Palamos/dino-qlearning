@@ -3,7 +3,7 @@
 `browser_env.py` implementa l'entorn amb dues funcions simples:
 
 - `reset()` inicia una partida i retorna el primer estat.
-- `step(action)` envia l'acció, espera una fracció de segon i retorna `(estat, recompensa, acabat, puntuació)`. Per `DUCK`, manté premuda la fletxa avall durant l'observació i després l'allibera.
+- `step(action)` envia l'acció, espera una fracció de segon i retorna `(estat, xoc, puntuació)`. No decideix la recompensa: aquesta regla pertany a `train.py`. Per `DUCK`, manté premuda la fletxa avall durant l'observació i després l'allibera.
 
 Per observar el joc, l'adaptador consulta `Runner.instance_` a la pàgina. D'aquí llegeix la posició del dinosaure, el següent obstacle, la velocitat i si hi ha hagut una col·lisió. Envia la tecla espai per saltar. Cap d'aquests detalls arriba a `qlearning.py`.
 

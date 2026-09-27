@@ -20,21 +20,28 @@ def train(
             state = environment.reset()
             episode_reward = 0.0
             max_score = 0
-            done = False
+            crash = False
 
             for _ in range(max_steps):
+                # Escollir acció
                 action = agent.choose_action(state)
-                next_state, reward, done, score = environment.step(action)
-                agent.learn(state, action, reward, next_state, done)
+
+                # Llegir l'estat del joc i definir la recompensa d'entrenament
+                next_state, crash, score = environment.step(action)
+                reward = -100.0 if crash else 1.0 
+
+                # Actualitzar Q(state, action)
+                agent.learn(state, action, reward, next_state, crash)
+                
                 state = next_state
                 episode_reward += reward
                 max_score = max(max_score, score)
 
-                if done:
+                if crash:
                     break
 
             agent.exploration = max(0.05, agent.exploration * 0.97)
-            result = "xoc" if done else "límit de passos"
+            result = "xoc" if crash else "límit de passos"
             print(
                 f"Partida {episode:03}: {result}; "
                 f"puntuació màxima={max_score}; "

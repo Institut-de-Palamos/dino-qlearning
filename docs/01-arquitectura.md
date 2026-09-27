@@ -22,6 +22,6 @@ dino/index.html
 - `qlearning.py` conté una taula de valors i dues operacions: escollir una acció i aprendre d'una transició.
 - `states.py` transforma mesures contínues del joc en una tupla petita que es pot utilitzar com a clau de la taula.
 - `browser_env.py` amaga els detalls del navegador. Per a l'entrenament només ofereix `reset()` i `step(action)`.
-- `train.py` implementa el bucle: observar, actuar, rebre resultat, aprendre i repetir.
+- `train.py` implementa el bucle: observar, actuar, definir la recompensa segons el resultat, aprendre i repetir.
 
 Aquesta frontera facilita canviar el browser o substituir-lo per un entorn simulat sense reescriure l'agent.
