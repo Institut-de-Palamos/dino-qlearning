@@ -29,4 +29,4 @@ Si la partida acaba, no hi ha futur en aquell episodi i el terme futur és zero.
 
 Per cada partida, `train.py` reinicia el joc. Després repeteix: tria una acció, executa un pas, actualitza la taula i continua amb el nou estat. També desa la puntuació més alta vista durant la partida i la mostra al resum. Aquesta puntuació del joc és diferent de la recompensa acumulada, que és el senyal utilitzat per aprendre. La partida s'atura en una col·lisió o en arribar al límit de passos.
 
-Per defecte, la taula només viu en memòria i es perd en sortir. Amb `--store`, l'agent desa la taula i els paràmetres d'aprenentatge en JSON al final de la sessió. Si el fitxer ja existeix, el carrega abans de començar; així podem continuar entrenant. La ruta per defecte és `models/q_table.json`, o se'n pot indicar una amb `--store ruta.json`.
+Les taules desades amb la versió anterior (dues accions i estats de quatre camps) es migren en carregar-les: els valors de `WAIT` i `JUMP` es conserven, el valor inicial de `DUCK` és zero, i l'estat nou comença amb el dinosaure no ajupit. En desar, s'escriu el format nou.

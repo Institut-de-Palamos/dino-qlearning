@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING, Any
 if TYPE_CHECKING:
     from playwright.sync_api import Browser, Page, Playwright
 
-from dino_qlearning.qlearning import JUMP
+from dino_qlearning.qlearning import DUCK, JUMP
 from dino_qlearning.states import State, make_state
 
 DEFAULT_GAME_URL = (Path(__file__).resolve().parents[2] / "dino" / "index.html").as_uri()
@@ -67,9 +67,18 @@ class BrowserDinoEnv:
         page = self._require_page()
         if action == JUMP:
             page.keyboard.press("Space")
+        elif action == DUCK:
+            page.keyboard.down("ArrowDown")
+        elif action != 0:
+            raise ValueError(f"Unknown action: {action}")
 
-        page.wait_for_timeout(self.step_milliseconds)
-        observation = self._read_game_state()
+        try:
+            page.wait_for_timeout(self.step_milliseconds)
+            observation = self._read_game_state()
+        finally:
+            if action == DUCK:
+                page.keyboard.up("ArrowDown")
+
         state = self._make_state(observation)
         crashed = bool(observation["crashed"])
         reward = -100.0 if crashed else 1.0
@@ -84,6 +93,7 @@ class BrowserDinoEnv:
             distance=observation["distance"],
             obstacle_type=observation["obstacle_type"],
             is_jumping=observation["is_jumping"],
+            is_ducking=observation["is_ducking"],
             speed=observation["speed"],
         )
 
@@ -100,6 +110,7 @@ class BrowserDinoEnv:
                     distance: obstacle ? obstacle.xPos - dino.xPos : null,
                     obstacle_type: obstacle ? obstacle.typeConfig.type : null,
                     is_jumping: dino.jumping,
+                    is_ducking: dino.ducking,
                     speed: runner.currentSpeed,
                     crashed: runner.crashed,
                     score: runner.distanceMeter.getActualDistance(

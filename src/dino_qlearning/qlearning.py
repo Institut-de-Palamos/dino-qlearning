@@ -10,12 +10,13 @@ from dino_qlearning.states import State
 
 WAIT = 0
 JUMP = 1
+DUCK = 2
 
 
 class QLearningAgent:
     def __init__(
         self,
-        action_count: int = 2,
+        action_count: int = 3,
         learning_rate: float = 0.1,
         discount: float = 0.95,
         exploration: float = 1.0,
@@ -53,48 +54,3 @@ class QLearningAgent:
         old_value = self.q_values[state][action]
         target = reward + self.discount * future_value
         self.q_values[state][action] = old_value + self.learning_rate * (target - old_value)
-
-    def save(self, path: str | Path) -> None:
-        """Save the table and learning settings as a readable JSON file."""
-        destination = Path(path)
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        data = {
-            "version": 1,
-            "action_count": self.action_count,
-            "learning_rate": self.learning_rate,
-            "discount": self.discount,
-            "exploration": self.exploration,
-            "q_values": [
-                {"state": list(state), "values": values}
-                for state, values in sorted(self.q_values.items())
-            ],
-        }
-        destination.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
-
-    def load(self, path: str | Path) -> None:
-        """Load a previously saved table and its learning settings."""
-        source = Path(path)
-        data: dict[str, Any] = json.loads(source.read_text(encoding="utf-8"))
-        if data.get("version") != 1:
-            raise ValueError(f"Unsupported Q-table version in {source}")
-        if data["action_count"] != self.action_count:
-            raise ValueError(
-                f"The saved table has {data['action_count']} actions; "
-                f"this agent expects {self.action_count}."
-            )
-
-        loaded_values: dict[State, list[float]] = {}
-        for entry in data["q_values"]:
-            state = tuple(entry["state"])
-            values = entry["values"]
-            if len(state) != 4 or len(values) != self.action_count:
-                raise ValueError(f"Invalid Q-table entry in {source}: {entry}")
-            loaded_values[state] = [float(value) for value in values]
-
-        self.learning_rate = float(data["learning_rate"])
-        self.discount = float(data["discount"])
-        self.exploration = float(data["exploration"])
-        self.q_values = defaultdict(
-            lambda: [0.0] * self.action_count,
-            loaded_values,
-        )

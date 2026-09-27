@@ -2,7 +2,7 @@
 
 from typing import TypeAlias
 
-State: TypeAlias = tuple[int, int, int, int]
+State: TypeAlias = tuple[int, int, int, int, int]
 
 DISTANCE_STEP = 50
 MAX_DISTANCE = 300
@@ -12,6 +12,7 @@ def make_state(
     distance: float | None,
     obstacle_type: str | None,
     is_jumping: bool,
+    is_ducking: bool,
     speed: float,
 ) -> State:
     """Bucket continuous game values so they can be dictionary keys."""
@@ -23,5 +24,6 @@ def make_state(
         obstacle_bucket = 2 if obstacle_type == "PTERODACTYL" else 1
 
     jumping_bucket = int(is_jumping)
+    ducking_bucket = int(is_ducking)
     speed_bucket = int(speed >= 10)
-    return distance_bucket, obstacle_bucket, jumping_bucket, speed_bucket
+    return distance_bucket, obstacle_bucket, jumping_bucket, ducking_bucket, speed_bucket
