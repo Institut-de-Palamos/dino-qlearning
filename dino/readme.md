@@ -1,0 +1,1 @@
+Codi obtingut de https://github.com/Richi2PL/chome-dino. S'ha aplicat una traducció al cataà.
