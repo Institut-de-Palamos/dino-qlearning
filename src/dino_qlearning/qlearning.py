@@ -57,4 +57,5 @@ class QLearningAgent:
         # Equació de Bellman: Q(s, a) = Q(s, a) + α * (r + γ * max(Q(s', a')) - Q(s, a))
         # on  α = self.learning_rate 
         #     γ = self.discount
-        self.q_values[state][action] = # TODO: Implementa l'equació de Bellman per actualitzar Q(state, action)
+        target = reward + self.discount * future_value
+        self.q_values[state][action] = old_value + self.learning_rate * (target - old_value)

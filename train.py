@@ -28,8 +28,8 @@ def train(
 
                 # Llegir l'estat del joc i definir la recompensa d'entrenament
                 next_state, crash, score = environment.step(action)
-                reward = # TODO: Quina és la recompensa??
-
+                reward = -100.0 if crash else 1.0 
+                
                 # Actualitzar Q(state, action)
                 agent.learn(state, action, reward, next_state, crash)
                 
